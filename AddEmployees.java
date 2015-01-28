@@ -175,7 +175,8 @@ public class AddEmployees extends JFrame
 		
 		public void actionPerformed( ActionEvent actionEvent )
 		{
-			AddEmployeeFrame addEmployeeFrame = new AddEmployeeFrame( frameTitle, tableModel );
+			UpdateGenericEmployee updateGenericEmployee = new UpdateGenericEmployee( DRIVER,
+							DATABASE_URL, USERNAME, PASSWORD );
 		}
 	}
 }
