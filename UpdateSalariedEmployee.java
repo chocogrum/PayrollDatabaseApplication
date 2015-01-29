@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.awt.FlowLayout;
 import javax.swing.JOptionPane;
 
-public class UpdateGenericEmployee extends JFrame
+public class UpdateSalariedEmployee extends JFrame
 {
 	private JLabel lblSocialSecurityNumber;
 	private JLabel lblFirstName;
@@ -69,22 +69,24 @@ public class UpdateGenericEmployee extends JFrame
 	private JPanel tablePanel;
 	private JButton btnSave;
 	
-	private ResultSetTableModel genericEmployeeModel;
+	private ResultSetTableModel salariedEmployeeModel;
 	
 	private final String DRIVER;
 	private final String DATABASE_URL;
 	private final String USERNAME;
 	private final String PASSWORD;
 	
-	private static final String GENERIC_EMPLOYEE_QUERY =
+	private static final String SALARIED_EMPLOYEE_QUERY =
 		"select socialSecurityNumber as \"Social Security Number\"" +
-		", firstName as \"First Name\"" +
-		", lastName as \"Last Name\"" +
-		", birthday as \"Birthday\"" +
-		", employeeType as \"Employee Type\"" +
-		", departmentName as \"Department Name\" from employees";
+		", weeklySalary as \"Weekly Salary\"" +
+		", bonus as \"Bonus\" from salariedEmployees";
+	
+	private static final String SALARIED_EMPLOYEE_SSN_QUERY =
+		"select socialSecurityNumber from employees " +
+		"where employeeType = 'Salaried Employee' "+
+		"and socialSecurityNumber not in (select socialSecurityNumber from salariedEmployees)";
 
-	public UpdateGenericEmployee( String driver, String databaseURL, 
+	public UpdateSalariedEmployee( String driver, String databaseURL, 
 								  String username, String password )
 	{
 		super( "Generic Employee" );
@@ -96,8 +98,8 @@ public class UpdateGenericEmployee extends JFrame
 		
 		try
 		{
-			genericEmployeeModel = new ResultSetTableModel( DRIVER, DATABASE_URL, USERNAME,
-															PASSWORD, GENERIC_EMPLOYEE_QUERY );
+			salariedEmployeeModel = new ResultSetTableModel( DRIVER, DATABASE_URL, USERNAME,
+															PASSWORD, SALARIED_EMPLOYEE_QUERY );
 		}
 		catch ( SQLException sqlException ) 
 		{
@@ -200,7 +202,7 @@ public class UpdateGenericEmployee extends JFrame
 		boxGenericEmployee.add( boxEmployeeType );
 		boxGenericEmployee.add( boxDepartmentName );
 		
-		btnSave = new JButton( "Save" );
+		btnSave = new JButton( "Shave" );
 		btnSave.addActionListener(
 			new ActionListener()
 			{
@@ -220,7 +222,7 @@ public class UpdateGenericEmployee extends JFrame
 			}
 		);
 		
-		employeeTable = new JTable( genericEmployeeModel );
+		employeeTable = new JTable( salariedEmployeeModel );
 		employeeTable.setGridColor( Color.BLACK );
 		
 		tablePanel = new JPanel();
@@ -255,7 +257,7 @@ public class UpdateGenericEmployee extends JFrame
 			connection = DriverManager.getConnection( DATABASE_URL, USERNAME, PASSWORD );
 			statement = connection.createStatement();
 			statement.executeUpdate( sqlStatement );
-			genericEmployeeModel.setQuery( GENERIC_EMPLOYEE_QUERY );
+			salariedEmployeeModel.setQuery( SALARIED_EMPLOYEE_QUERY );
 		}
 		catch( SQLException sqlException )
 		{

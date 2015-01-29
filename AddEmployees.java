@@ -105,8 +105,17 @@ public class AddEmployees extends JFrame
 																  "Add Generic Employee" ) );
 		
 		btnSalariedEmployee = new JButton( "Add Salaried Employee" );
-		btnSalariedEmployee.addActionListener( new ButtonListener( salariedEmployeeModel,
-																   "Add Salaried Employee" ) );
+		btnSalariedEmployee.addActionListener(
+			new ActionListener()
+			{
+				public void actionPerformed( ActionEvent actionEvent )
+				{
+					UpdateSalariedEmployee updateSalariedEmployee =
+						new UpdateSalariedEmployee( DRIVER,	DATABASE_URL, USERNAME, PASSWORD );
+				}
+			}
+		);
+		
 		
 		btnCommissionEmployee = new JButton( "Add Commission Employee" );
 		btnCommissionEmployee.addActionListener( new ButtonListener( commissionEmployeeModel,
